@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Legume Credit</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings1">Email</string>
+    <string name="action_settings2">Info</string>
+
+
+    <string name="output_header">Nitrogen Credit(lb N/acre)</string>
+
+
+    <string name="result_default">000</string>
+    <string name="range_default"> </string>
+
+    <string name="forage_species1">Alfalfa</string>
+    <string name="forage_species2">Other</string>
+    <string name="forage_species_header">Forage Species</string>
+
+    <string name="soil_type1">Textured</string>
+    <string name="soil_type2">Sand</string>
+    <string name="soil_type_header">Soil Type</string>
+
+
+    <string name="regrowth_type_header">Amount of Regrowth</string>
+    <string name="regrowth1">\u003C 8</string>
+    <string name="regrowth2">\u003E 8</string>
+
+    <string name="stand_density_header">Sand Density</string>
+    <string name="stand_density1">Good</string>
+    <string name="stand_density2">Fair</string>
+    <string name="stand_density3">Poor</string>
+    <string name="density_info"> - </string>
+
+
+
+
+</resources>
