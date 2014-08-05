@@ -97,47 +97,9 @@
                 android:layout_weight="1"
                 android:textSize="18sp"/>
         </LinearLayout>
-        <!-- The regrowth type header -->
-        <TextView
-            android:id="@+id/regrowth_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/regrowth_type_header"
-            android:textSize="22sp"
-            android:textColor="#000"/>
-        <!-- The soil type picker -->
-        <LinearLayout
-            android:id="@+id/regrowth_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal">
-            <!-- The first option -->
-            <TextView
-                android:id="@+id/regrowth1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/regrowth1"
-                android:textColor="@color/text_green"
-                android:background="@drawable/toggle_left_button_unselected"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:textSize="18sp"/>
-            <!-- The second option -->
-            <TextView
-                android:id="@+id/regrowth2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/regrowth2"
-                android:textColor="@color/text_green"
-                android:background="@drawable/toggle_right_button_unselected"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:textSize="18sp"/>
-        </LinearLayout>
-        <!-- The soil density header -->
+
+
+        <!-- The stand density header -->
         <TextView
             android:id="@+id/stand_density_header"
             android:layout_width="wrap_content"
@@ -147,7 +109,7 @@
             android:padding="5dp"
             android:textSize="22sp"
             android:textColor="#000"/>
-        <!-- The soil yield potential picker -->
+        <!-- The stand density picker -->
         <LinearLayout
             android:id="@+id/stand_dentsity_layout"
             android:layout_width="fill_parent"
@@ -193,10 +155,53 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/density_info"
-            android:padding="5dp"
-            android:paddingBottom="10dp"
+
             android:textSize="13sp"
             android:textColor="#000"/>
+
+
+        <!-- The regrowth type header -->
+        <TextView
+            android:id="@+id/regrowth_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/regrowth_type_header"
+            android:textSize="22sp"
+            android:textColor="#000"/>
+        <!-- The soil type picker -->
+        <LinearLayout
+            android:id="@+id/regrowth_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal">
+            <!-- The first option -->
+            <TextView
+                android:id="@+id/regrowth1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/regrowth1"
+                android:textColor="@color/text_green"
+                android:background="@drawable/toggle_left_button_unselected"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+            <!-- The second option -->
+            <TextView
+                android:id="@+id/regrowth2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/regrowth2"
+                android:textColor="@color/text_green"
+                android:background="@drawable/toggle_right_button_unselected"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
 
 
 

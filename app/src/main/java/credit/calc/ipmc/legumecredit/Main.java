@@ -269,6 +269,7 @@ public class Main extends ActionBarActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                //view.getSettings().setJavaScriptEnabled(true);
                 view.loadUrl(url);
 
                 return true;
