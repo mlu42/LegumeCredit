@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Legume N Credit</string>
+    <string name="app_name">N Credit</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
@@ -36,6 +36,58 @@
     <string name="density_info">  </string>
 
 
+    <string name="manure_type">Manure Type</string>
+    <string name="manure_type1">Solid</string>
+    <string name="manure_type2">Liquid</string>
+
+    <string name="incorp_time_header">Time to Incorporation</string>
+    <string name="incorp_time1"><![CDATA[<1 hour]]></string>
+    <string name="incorp_time2">1h - 3d</string>
+    <string name="incorp_time3"><![CDATA[>3 days]]></string>
+    <string name="manure_output_header">Manure Credits (lb N/acre)</string>
+    <string name="manure_output">000</string>
+
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="manure_input">lb/1,000 gal</string>
+
+    <string name="manure_item_header">Manure Item</string>
+    <string-array name="solid_manure">
+        <item>Beef</item>
+        <item>Dairy: semi-solid(11.1-20.0% DM)</item>
+        <item>Dairy: solid(>20.9% DM)</item>
+        <item>Goat</item>
+        <item>Horse</item>
+        <item>Poultry: chicken</item>
+        <item>Poultry: duck</item>
+        <item>Poultry: turkey</item>
+        <item>Sheep</item>
+        <item>Swine</item>
+    </string-array>
+
+    <string-array name="liquid_manure">
+        <item>Beef</item>
+        <item><![CDATA[Dairy:liquid(<4.0% DM)]]></item>
+        <item>Dairy: slurry(4.1-11.0% DM)</item>
+        <item>Goat</item>
+        <item>Poultry</item>
+        <item>Swine:finish(indoor pit)</item>
+        <item>Swine:finish(outdoor pit)</item>
+        <item>Swine: (farrow-nursey, indoor pit)</item>
+        <item>Veal calf</item>
+    </string-array>
+
+    <string name="subject_header">header</string>
+    <string name="subject">subject</string>
+    <string name="text_header">text_header</string>
+    <string name="body_text">body_text</string>
+    <string name="result_default1">000</string>
+    <string name="result_default2">000</string>
+    <string name="result_default3">000</string>
+    <string name="manure_result_default">000</string>
+    <string name="manure_result_default1">000</string>
+    <string name="manure_result_default2">000</string>
+    <string name="manure_result_default3">000</string>
 
 
 </resources>

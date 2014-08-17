@@ -6,7 +6,7 @@ package credit.calc.ipmc.legumecredit;
 
 import android.widget.TextView;
 
-public class CalcHelper {
+public class LegumeHelper {
 
 
 	private TwoStateToggle species;
@@ -37,7 +37,7 @@ public class CalcHelper {
 	/*
 	 * A constructor that takes all of the necessary layout objects to be read from or written to
 	 */
-	public CalcHelper(TwoStateToggle sp, TwoStateToggle s, ThreeStateToggle sd, TwoStateToggle rg, TextView rs)
+	public LegumeHelper(TwoStateToggle sp, TwoStateToggle s, ThreeStateToggle sd, TwoStateToggle rg, TextView rs)
 	{
 		species = sp;
 		soil = s;
@@ -68,7 +68,8 @@ public class CalcHelper {
                     c=2;
                 }
                 else{
-                    c=3;
+                    c
+                            =3;
                 }
             }
 
