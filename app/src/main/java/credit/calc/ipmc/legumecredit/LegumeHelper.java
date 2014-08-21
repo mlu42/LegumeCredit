@@ -50,7 +50,7 @@ public class LegumeHelper {
 	
 	/*
 	 * Calculates the range by deciding which indexes to look up
-	 * and looking them up in the tables
+	 * and looking them up in the table
 	 */
 	public void calculate()
 	{

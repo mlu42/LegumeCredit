@@ -2,12 +2,21 @@ package credit.calc.ipmc.legumecredit;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Created by mo on 8/5/14.
@@ -26,11 +35,24 @@ public class ManureCalc extends Activity {
 
     private TextView decrease;
     private TextView increase;
-    private TextView amount;
-    private TextView result;
+    private TextView countRes;
+    private TextView resultN;
+    private TextView resultP;
+    private TextView resultK;
+    private TextView resultS;
 
     private  TwoStateToggle count;
     private Spinner spinner;
+
+    static JSONObject jObj = null;
+    String myjsonstring = "";
+    private static String url = "file:///android_asset/ManureCredit.json";
+
+
+    private String manureSpecies_Tag;
+    private String manureType_Tag;
+    private String incorptime_Tag;
+
 
 
 
@@ -41,8 +63,6 @@ public class ManureCalc extends Activity {
         //setContentView(R.layout.activity_main);
 
 //        FrameLayout container = (FrameLayout) findViewById(R.id.container);
-//
-//
 //        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View menuLayout = inflater.inflate(R.layout.layout_creditcalc, container, true);
 
@@ -59,18 +79,23 @@ public class ManureCalc extends Activity {
 
         decrease = (TextView) findViewById(R.id.minus);
         increase = (TextView) findViewById(R.id.plus);
-        amount = (TextView) findViewById(R.id.manure_input);
-        result = (TextView) findViewById(R.id.manure_output0);
+        countRes = (TextView) findViewById(R.id.manure_input);
+        resultN = (TextView) findViewById(R.id.manure_output0);
+        resultP = (TextView) findViewById(R.id.manure_output1);
+        resultK = (TextView) findViewById(R.id.manure_output2);
+        resultS = (TextView) findViewById(R.id.manure_output3);
 
         manureType = new TwoStateToggle(manure_type1, manure_type2);
         incorpTime = new ThreeStateToggle(incorpTime1, incorpTime2, incorpTime3);
         count = new TwoStateToggle(decrease, increase);
 
 
+        //read the jason file
+        getJSONfile(url);
 
 
-        final ManureHelper calc = new ManureHelper(manureType, incorpTime, count, result);
 
+        //Set spinner adapter
         spinner = (Spinner) findViewById(R.id.manure_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -88,17 +113,20 @@ public class ManureCalc extends Activity {
         spinner.setAdapter(adapter);
 
 
+
+
         manure_type1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(manureType.getCurrentState() != 0)
-                {
+                if (manureType.getCurrentState() != 0) {
                     manureType.setState(0);
                     spinner.setAdapter(adapter);
                 }
-                calc.calculate();
 
+                calculate();
             }
+
+
         });
 
         manure_type2.setOnClickListener(new View.OnClickListener() {
@@ -111,9 +139,8 @@ public class ManureCalc extends Activity {
                     spinner.setAdapter(adapter2);
 
                 }
-                calc.calculate();
 
-
+                    calculate();
             }
 
         });
@@ -126,7 +153,7 @@ public class ManureCalc extends Activity {
                     incorpTime.setState(0);
 
                 }
-                calc.calculate();
+                calculate();
 
             }
         });
@@ -138,7 +165,7 @@ public class ManureCalc extends Activity {
                 {
                     incorpTime.setState(1);
                 }
-                calc.calculate();
+                calculate();
 
             }
         });
@@ -149,11 +176,40 @@ public class ManureCalc extends Activity {
                 if (incorpTime.getCurrentState() != 2) {
                     incorpTime.setState(2);
                 }
-                calc.calculate();
+                calculate();
 
             }
         });
 
+
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            String selected;
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                // An item was selected. You can retrieve the selected item using
+                // parent.getItemAtPosition(pos)
+
+                selected = parent.getItemAtPosition(pos).toString();
+
+//                Context context = getApplicationContext();
+//                CharSequence text = selected;
+//                int duration = Toast.LENGTH_SHORT;
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
+
+                manureSpecies_Tag = spinner.getSelectedItem().toString();
+                calculate();
+
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+                selected = "";
+            }
+
+
+        });
 
 
 
@@ -161,10 +217,12 @@ public class ManureCalc extends Activity {
         decrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (incorpTime.getCurrentState() != 0) {
-                    incorpTime.setState(0);
+                if (count.getCurrentState() != 0) {
+                    count.setState(0);
                 }
-                calc.calculate();
+
+
+                //calc.calculate();
 
             }
         });
@@ -172,8 +230,11 @@ public class ManureCalc extends Activity {
         increase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (count.getCurrentState() != 1) {
+                    count.setState(1);
+                }
+                //calc.calculate();
 
-                calc.calculate();
 
             }
         });
@@ -190,6 +251,121 @@ public class ManureCalc extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+
+
+
+    public void calculate() {
+
+    if(manureType.getCurrentState()>-1 && incorpTime.getCurrentState()>-1 ) {
+        if (manureType.getCurrentState() == 0) {
+            manureType_Tag = "Solid";
+        } else {
+            manureType_Tag = "Liquid";
+        }
+
+        switch (incorpTime.getCurrentState()) {
+            case 0:
+                incorptime_Tag = ">";
+                break;
+            case 1:
+                incorptime_Tag = "-";
+                break;
+            case 2:
+                incorptime_Tag = "<";
+                break;
+
+        }
+        parseJASON();
+
+    }
+
+
+    }
+
+
+
+    public JSONObject getJSONfile(String url){
+        StringBuffer sb = new StringBuffer();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(new InputStreamReader(getAssets().open("ManureCredits.json")));
+            String temp;
+            while ((temp = br.readLine()) != null) {
+                sb.append(temp);
+            }
+
+            myjsonstring = sb.toString();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close(); // stop reading
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        // try parse the string to a JSON object
+        try {
+            jObj = new JSONObject(myjsonstring);
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        }
+
+        return jObj;
+    }
+
+
+    public void parseJASON(){
+
+        String aJasonrsltN= "";
+        String aJasonrsltP= "";
+        String aJasonrsltK= "";
+        String aJasonrsltS= "";
+
+
+        try {
+            // Creating JSONObject from String
+            JSONObject aJsonManure = jObj.getJSONObject(manureType_Tag);
+
+            JSONObject aJasonAnimal= aJsonManure.getJSONObject(manureSpecies_Tag);
+
+
+            JSONObject aJasonN = aJasonAnimal.getJSONObject("N");
+
+            aJasonrsltN = aJasonN.getString(incorptime_Tag);
+
+            aJasonrsltK = aJasonAnimal.getString("K");
+            aJasonrsltP = aJasonAnimal.getString("P");
+            aJasonrsltS = aJasonAnimal.getString("S");
+
+            resultN.setText(aJasonrsltN);
+            resultP.setText(aJasonrsltP);
+            resultK.setText(aJasonrsltK);
+            resultS.setText(aJasonrsltS);
+
+
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
@@ -278,3 +454,6 @@ public class ManureCalc extends Activity {
 //
 //    }
 }
+
+
+

@@ -199,27 +199,68 @@
                 android:background="@drawable/output_background"
                 android:orientation="horizontal">
                 <!-- The result -->
-                <TextView
-                    android:id="@+id/manure_output0"
+                <LinearLayout
+                    android:id="@+id/manure_output_group0"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/manure_result_default"
-                    android:textColor="@color/black"
-                    android:paddingBottom="10dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:textSize="50sp"/>
-                <TextView
-                    android:id="@+id/manure_output1"
+                    android:background="@drawable/output_background"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/N"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_header0"
+                        android:textColor="@color/N"
+                        android:padding="1dp"
+                        android:layout_weight="1"
+                        android:textSize="10sp"/>
+                    <TextView
+                        android:id="@+id/manure_output0"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_default"
+                        android:textColor="@color/N"
+                        android:paddingBottom="10dp"
+                        android:layout_weight="1"
+                        android:textSize="50sp"/>
+                </LinearLayout>
 
+
+
+                <LinearLayout
+                    android:id="@+id/manure_output_group1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/manure_result_default1"
-                    android:textColor="@color/black"
-                    android:paddingBottom="10dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:textSize="50sp"/>
+                    android:background="@drawable/output_background"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/P2O5"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_header1"
+                        android:padding="1dp"
+                        android:textColor="@color/P"
+                        android:layout_weight="1"
+                        android:textSize="10sp"/>
+                    <TextView
+                        android:id="@+id/manure_output1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_default1"
+                        android:textColor="@color/P"
+                        android:paddingBottom="10dp"
+                        android:layout_weight="1"
+                        android:textSize="50sp"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -231,27 +272,68 @@
                 android:background="@drawable/output_background"
                 android:orientation="horizontal">
                 <!-- The result -->
-                <TextView
-                    android:id="@+id/manure_output2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/manure_result_default2"
-                    android:textColor="@color/black"
-                    android:paddingBottom="10dp"
-                    android:layout_weight="1"
-                    android:textSize="50sp"/>
-                <TextView
-                    android:id="@+id/manure_output3"
 
+                <LinearLayout
+                    android:id="@+id/manure_output_group2"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/manure_result_default3"
-                    android:textColor="@color/black"
-                    android:paddingBottom="10dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:textSize="50sp"/>
+                    android:background="@drawable/output_background"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/K2O"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_header2"
+                        android:textColor="@color/K"
+                        android:padding="1dp"
+                        android:layout_weight="1"
+                        android:textSize="10sp"/>
+                    <TextView
+                        android:id="@+id/manure_output2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_default2"
+                        android:textColor="@color/K"
+                        android:paddingBottom="10dp"
+                        android:layout_weight="1"
+                        android:textSize="50sp"/>
+                    </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/manure_output_group3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:background="@drawable/output_background"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/S"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_header3"
+                        android:textColor="@color/S"
+                        android:layout_weight="1"
+                        android:textSize="10sp"/>
+                    <TextView
+                        android:id="@+id/manure_output3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/manure_result_default3"
+                        android:textColor="@color/S"
+                        android:paddingBottom="10dp"
+                        android:layout_weight="1"
+                        android:textSize="50sp"/>
+                </LinearLayout>
+
+
             </LinearLayout>
 
         </LinearLayout>

@@ -14,5 +14,12 @@
     <color name="background_green">#7fbf7f</color>
     <color name="text_green">#198c19</color>
 
+    <color name="N">#2A3F2A</color>
+    <color name="S">#3F2899</color>
+    <color name="K">#D86E1C</color>
+    <color name="P">#BF7F9F</color>
+
+
+
 
 </resources>
