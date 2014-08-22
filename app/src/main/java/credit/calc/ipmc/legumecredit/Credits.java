@@ -15,7 +15,7 @@ public class Credits extends Activity{
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.credits);
-        
+
         webview = (WebView) findViewById(R.id.credits_webview);
         
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -34,4 +34,7 @@ public class Credits extends Activity{
     	
     	super.onResume();
     }
+
+
+
 }

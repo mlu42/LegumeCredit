@@ -59,12 +59,12 @@ public class Main extends TabActivity {
         spec.setContent(intent);
         tabHost.addTab(spec);
 
-//        intent = new Intent().setClass(this, Credits.class);
-//        spec = tabHost.newTabSpec("credits");
-//        spec.setIndicator("N Credits");
-//        spec.setContent(intent);
-//        tabHost.addTab(spec);
-//
+        intent = new Intent().setClass(this, Credits.class);
+        spec = tabHost.newTabSpec("info");
+        spec.setIndicator("Info");
+        spec.setContent(intent);
+        tabHost.addTab(spec);
+
 //        intent = new Intent().setClass(this, Email.class);
 //
 //        spec = tabHost.newTabSpec("email");

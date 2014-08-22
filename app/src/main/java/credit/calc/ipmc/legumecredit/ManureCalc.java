@@ -40,7 +40,7 @@ public class ManureCalc extends Activity {
     private TextView increase;
     private TextView countRes;
     private int incrementor = 1;
-    private  TwoStateToggle counter;
+    private TwoStateToggle counter;
     private boolean mDown;
 
     private Spinner spinner;
@@ -67,13 +67,11 @@ public class ManureCalc extends Activity {
     final String unitLiquid = " gal/acre";
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_manure);
-        //setContentView(R.layout.activity_main);
-
+//        setContentView(R.layout.activity_main);
 //        FrameLayout container = (FrameLayout) findViewById(R.id.container);
 //        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View menuLayout = inflater.inflate(R.layout.layout_creditcalc, container, true);
@@ -103,14 +101,11 @@ public class ManureCalc extends Activity {
         incorpTime = new ThreeStateToggle(incorpTime1, incorpTime2, incorpTime3);
 
 
-
-
         //read the jason file
         getJSONfile(url);
 
 
-
-        //Set spinner adapter
+        ///////////////Set the spinner adapter ///////////////////
         spinner = (Spinner) findViewById(R.id.manure_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -126,8 +121,6 @@ public class ManureCalc extends Activity {
 
 
         spinner.setAdapter(adapter);
-
-
 
 
         manure_type1.setOnClickListener(new View.OnClickListener() {
@@ -147,15 +140,14 @@ public class ManureCalc extends Activity {
         manure_type2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(manureType.getCurrentState() != 1)
-                {
+                if (manureType.getCurrentState() != 1) {
                     manureType.setState(1);
                     spinner.clearAnimation();
                     spinner.setAdapter(adapter2);
 
                 }
 
-                    calculate();
+                calculate();
             }
 
         });
@@ -163,8 +155,7 @@ public class ManureCalc extends Activity {
         incorpTime1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(incorpTime.getCurrentState() != 0)
-                {
+                if (incorpTime.getCurrentState() != 0) {
                     incorpTime.setState(0);
 
                 }
@@ -176,8 +167,7 @@ public class ManureCalc extends Activity {
         incorpTime2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(incorpTime.getCurrentState() != 1)
-                {
+                if (incorpTime.getCurrentState() != 1) {
                     incorpTime.setState(1);
                 }
                 calculate();
@@ -197,10 +187,9 @@ public class ManureCalc extends Activity {
         });
 
 
-
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             String selected;
+
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
@@ -218,6 +207,7 @@ public class ManureCalc extends Activity {
                 calculate();
 
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
                 selected = "";
@@ -227,20 +217,17 @@ public class ManureCalc extends Activity {
         });
 
 
-
-
-
         decrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 counter.setState(0);
-                if(incrementor > lowerbound){
-                    incrementor --;
+                if (incrementor > lowerbound) {
+                    incrementor--;
                     String temp;
-                    if(manureType.getCurrentState() == 0){
+                    if (manureType.getCurrentState() == 0) {
                         temp = Integer.toString(incrementor) + unitSolid;
-                    }else{
+                    } else {
                         temp = Integer.toString(incrementor) + unitLiquid;
                     }
 
@@ -252,7 +239,7 @@ public class ManureCalc extends Activity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                       counter.reSetState();
+                        counter.reSetState();
                     }
                 }, 200);
                 calculate();
@@ -265,12 +252,12 @@ public class ManureCalc extends Activity {
             public void onClick(View v) {
 
                 counter.setState(1);
-                if(incrementor < upperbound){
+                if (incrementor < upperbound) {
                     incrementor++;
                     String temp;
-                    if(manureType.getCurrentState() == 0){
+                    if (manureType.getCurrentState() == 0) {
                         temp = Integer.toString(incrementor) + unitSolid;
-                    }else{
+                    } else {
                         temp = Integer.toString(incrementor) + unitLiquid;
                     }
                     countRes.setText(temp);
@@ -286,11 +273,10 @@ public class ManureCalc extends Activity {
                 calculate();
 
 
-
             }
         });
 
-//use to handle long touch and accelerate the increment of decrement
+        //use to handle long touch and accelerate the increment of decrement
         decrease.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -300,7 +286,7 @@ public class ManureCalc extends Activity {
                     counter.setState(0);
                     Log.i("repeatBtn", "MotionEvent.ACTION_DOWN");
                     handler.removeCallbacks(mUpdateTaskdown);
-                    handler.postAtTime(mUpdateTaskdown,SystemClock.uptimeMillis() + 100);
+                    handler.postAtTime(mUpdateTaskdown, SystemClock.uptimeMillis() + 100);
                 } else if (action == MotionEvent.ACTION_UP) {
                     Log.i("repeatBtn", "MotionEvent.ACTION_UP");
                     handler.removeCallbacks(mUpdateTaskdown);
@@ -333,16 +319,12 @@ public class ManureCalc extends Activity {
         }); //end b my button
 
 
-
-
-
-
     }
 
     //accelerate the increment of decrement
     private Runnable mUpdateTaskup = new Runnable() {
         public void run() {
-            if(incrementor < upperbound) {
+            if (incrementor < upperbound) {
                 incrementor++;
                 String temp;
                 if (manureType.getCurrentState() == 0) {
@@ -353,7 +335,7 @@ public class ManureCalc extends Activity {
                 countRes.setText(String.valueOf(temp));
                 Log.i("repeatBtn", "repeat click");
             }
-                handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+            handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
 
         }//end run
     };// end runnable
@@ -361,7 +343,7 @@ public class ManureCalc extends Activity {
     //accelerate the increment of decrement
     private Runnable mUpdateTaskdown = new Runnable() {
         public void run() {
-            if(incrementor > lowerbound) {
+            if (incrementor > lowerbound) {
                 incrementor--;
                 String temp;
                 if (manureType.getCurrentState() == 0) {
@@ -372,14 +354,10 @@ public class ManureCalc extends Activity {
                 countRes.setText(String.valueOf(temp));
                 Log.i("repeatBtn", "repeat click");
             }
-                handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+            handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
 
         }//end run
     };// end Runnable
-
-
-
-
 
 
     @Override
@@ -390,39 +368,38 @@ public class ManureCalc extends Activity {
     }
 
 
-
-
+    //call when need to calculate the result
     public void calculate() {
 
-    if(manureType.getCurrentState()>-1 && incorpTime.getCurrentState()>-1 ) {
-        if (manureType.getCurrentState() == 0) {
-            manureType_Tag = "Solid";
-        } else {
-            manureType_Tag = "Liquid";
+        if (manureType.getCurrentState() > -1 && incorpTime.getCurrentState() > -1) {
+            if (manureType.getCurrentState() == 0) {
+                manureType_Tag = "Solid";
+            } else {
+                manureType_Tag = "Liquid";
+            }
+
+            switch (incorpTime.getCurrentState()) {
+                case 0:
+                    incorptime_Tag = ">";
+                    break;
+                case 1:
+                    incorptime_Tag = "-";
+                    break;
+                case 2:
+                    incorptime_Tag = "<";
+                    break;
+
+            }
+            parseJASON();
+
         }
 
-        switch (incorpTime.getCurrentState()) {
-            case 0:
-                incorptime_Tag = ">";
-                break;
-            case 1:
-                incorptime_Tag = "-";
-                break;
-            case 2:
-                incorptime_Tag = "<";
-                break;
-
-        }
-        parseJASON();
 
     }
 
 
-    }
-
-
-//get the jason file
-    public JSONObject getJSONfile (String url){
+    //get the jason file
+    public JSONObject getJSONfile(String url) {
         StringBuffer sb = new StringBuffer();
         BufferedReader br = null;
 
@@ -456,13 +433,13 @@ public class ManureCalc extends Activity {
         return jObj;
     }
 
-//parse the jason object into text and set them into the text view
-    public void parseJASON(){
+    //parse the jason object into text and set them into the text view
+    public void parseJASON() {
 
-        String aJasonrsltN= "";
-        String aJasonrsltP= "";
-        String aJasonrsltK= "";
-        String aJasonrsltS= "";
+        String aJasonrsltN = "";
+        String aJasonrsltP = "";
+        String aJasonrsltK = "";
+        String aJasonrsltS = "";
 
         int rsltN;
         int rsltP;
@@ -470,12 +447,11 @@ public class ManureCalc extends Activity {
         int rsltS;
 
 
-
         try {
             // Creating JSONObject from String
             JSONObject aJsonManure = jObj.getJSONObject(manureType_Tag);
 
-            JSONObject aJasonAnimal= aJsonManure.getJSONObject(manureSpecies_Tag);
+            JSONObject aJasonAnimal = aJsonManure.getJSONObject(manureSpecies_Tag);
 
 
             JSONObject aJasonN = aJasonAnimal.getJSONObject("N");
@@ -499,7 +475,6 @@ public class ManureCalc extends Activity {
             resultS.setText(Integer.toString(rsltS));
 
 
-
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -507,14 +482,6 @@ public class ManureCalc extends Activity {
 
 
     }
-
-
-
-
-
-
-
-
 
 
 //    @Override
@@ -567,42 +534,7 @@ public class ManureCalc extends Activity {
 //        startActivity(Intent.createChooser(intent, ""));		// Starts the email activity, passing the given data with it
 //
 //    }
-//    private void helpinfo(String curURL) {
-//
-//        AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
-//        alert.setTitle("Help Info");
-//
-//        WebView wv = new WebView(this);
-//        wv.getSettings().setJavaScriptEnabled(true);
-//        wv.loadUrl(curURL);
-//        wv.setWebViewClient(new WebViewClient() {
-//
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                //view.getSettings().setJavaScriptEnabled(true);
-//                view.loadUrl(url);
-//
-//                return true;
-//            }
-//        });
-//
-//        alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int id) {
-//            }
-//        });
-//        Dialog d = alert.setView(wv).create();
-//        d.show();
-//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//        lp.copyFrom(d.getWindow().getAttributes());
-//
-//        //lp.width = WindowManager.LayoutParams.FILL_PARENT;
-//        //lp.height = WindowManager.LayoutParams.FILL_PARENT;
-//        d.getWindow().setAttributes(lp);
-//
-//
-//
-//    }
+
 }
 
 
