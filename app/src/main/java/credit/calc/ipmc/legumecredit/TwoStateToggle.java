@@ -156,7 +156,22 @@ public class TwoStateToggle {
 					break;
 		}
 	}
-	
+
+    public void reSetState()
+    {
+        leftSet = false;
+        rightSet = false;
+        setLeftImage(R.drawable.toggle_left_button_unselected);
+        setRightImage(R.drawable.toggle_right_button_unselected);
+        //change text color
+        left.setTextColor(unselectedColor);
+        right.setTextColor(unselectedColor);
+
+        set = 0;
+
+    }
+
+
 	// Getters
 	public TextView getLeftView()
 	{

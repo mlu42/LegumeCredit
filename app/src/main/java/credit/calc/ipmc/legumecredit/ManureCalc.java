@@ -2,8 +2,11 @@ package credit.calc.ipmc.legumecredit;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+
 /**
  * Created by mo on 8/5/14.
  */
@@ -29,23 +33,25 @@ public class ManureCalc extends Activity {
     private TextView incorpTime1;
     private TextView incorpTime2;
     private TextView incorpTime3;
-
     private TwoStateToggle manureType;
     private ThreeStateToggle incorpTime;
 
     private TextView decrease;
     private TextView increase;
     private TextView countRes;
+    private int incrementor = 1;
+    private  TwoStateToggle counter;
+    private boolean mDown;
+
+    private Spinner spinner;
+
     private TextView resultN;
     private TextView resultP;
     private TextView resultK;
     private TextView resultS;
 
-    private  TwoStateToggle count;
-    private Spinner spinner;
-
     static JSONObject jObj = null;
-    String myjsonstring = "";
+    private String myjsonstring = "";
     private static String url = "file:///android_asset/ManureCredit.json";
 
 
@@ -53,6 +59,12 @@ public class ManureCalc extends Activity {
     private String manureType_Tag;
     private String incorptime_Tag;
 
+    final Handler handler = new Handler();
+
+    final int upperbound = 500;
+    final int lowerbound = 1;
+    final String unitSolid = " ton/acre";
+    final String unitLiquid = " gal/acre";
 
 
 
@@ -79,7 +91,9 @@ public class ManureCalc extends Activity {
 
         decrease = (TextView) findViewById(R.id.minus);
         increase = (TextView) findViewById(R.id.plus);
+        counter = new TwoStateToggle(decrease, increase);
         countRes = (TextView) findViewById(R.id.manure_input);
+
         resultN = (TextView) findViewById(R.id.manure_output0);
         resultP = (TextView) findViewById(R.id.manure_output1);
         resultK = (TextView) findViewById(R.id.manure_output2);
@@ -87,7 +101,8 @@ public class ManureCalc extends Activity {
 
         manureType = new TwoStateToggle(manure_type1, manure_type2);
         incorpTime = new ThreeStateToggle(incorpTime1, incorpTime2, incorpTime3);
-        count = new TwoStateToggle(decrease, increase);
+
+
 
 
         //read the jason file
@@ -214,15 +229,33 @@ public class ManureCalc extends Activity {
 
 
 
+
         decrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count.getCurrentState() != 0) {
-                    count.setState(0);
+
+                counter.setState(0);
+                if(incrementor > lowerbound){
+                    incrementor --;
+                    String temp;
+                    if(manureType.getCurrentState() == 0){
+                        temp = Integer.toString(incrementor) + unitSolid;
+                    }else{
+                        temp = Integer.toString(incrementor) + unitLiquid;
+                    }
+
+                    countRes.setText(temp);
+
                 }
 
 
-                //calc.calculate();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       counter.reSetState();
+                    }
+                }, 200);
+                calculate();
 
             }
         });
@@ -230,14 +263,74 @@ public class ManureCalc extends Activity {
         increase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count.getCurrentState() != 1) {
-                    count.setState(1);
+
+                counter.setState(1);
+                if(incrementor < upperbound){
+                    incrementor++;
+                    String temp;
+                    if(manureType.getCurrentState() == 0){
+                        temp = Integer.toString(incrementor) + unitSolid;
+                    }else{
+                        temp = Integer.toString(incrementor) + unitLiquid;
+                    }
+                    countRes.setText(temp);
                 }
-                //calc.calculate();
+
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        counter.reSetState();
+                    }
+                }, 200);
+                calculate();
+
 
 
             }
         });
+
+//use to handle long touch and accelerate the increment of decrement
+        decrease.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionevent) {
+                int action = motionevent.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    counter.setState(0);
+                    Log.i("repeatBtn", "MotionEvent.ACTION_DOWN");
+                    handler.removeCallbacks(mUpdateTaskdown);
+                    handler.postAtTime(mUpdateTaskdown,SystemClock.uptimeMillis() + 100);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    Log.i("repeatBtn", "MotionEvent.ACTION_UP");
+                    handler.removeCallbacks(mUpdateTaskdown);
+                    counter.reSetState();
+                }//end else
+                return false;
+            }//end on touch
+
+        });//end b other button
+
+
+        increase.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionevent) {
+
+                int action = motionevent.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    counter.setState(1);
+                    Log.i("repeatBtn", "MotionEvent.ACTION_DOWN");
+                    handler.removeCallbacks(mUpdateTaskup);
+                    handler.postAtTime(mUpdateTaskup, SystemClock.uptimeMillis() + 100);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    Log.i("repeatBtn", "MotionEvent.ACTION_UP");
+                    handler.removeCallbacks(mUpdateTaskup);
+                    counter.reSetState();
+                }//end else
+                return false;
+            } //end onTouch
+        }); //end b my button
 
 
 
@@ -245,6 +338,50 @@ public class ManureCalc extends Activity {
 
 
     }
+
+    //accelerate the increment of decrement
+    private Runnable mUpdateTaskup = new Runnable() {
+        public void run() {
+            if(incrementor < upperbound) {
+                incrementor++;
+                String temp;
+                if (manureType.getCurrentState() == 0) {
+                    temp = Integer.toString(incrementor) + unitSolid;
+                } else {
+                    temp = Integer.toString(incrementor) + unitLiquid;
+                }
+                countRes.setText(String.valueOf(temp));
+                Log.i("repeatBtn", "repeat click");
+            }
+                handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+
+        }//end run
+    };// end runnable
+
+    //accelerate the increment of decrement
+    private Runnable mUpdateTaskdown = new Runnable() {
+        public void run() {
+            if(incrementor > lowerbound) {
+                incrementor--;
+                String temp;
+                if (manureType.getCurrentState() == 0) {
+                    temp = Integer.toString(incrementor) + unitSolid;
+                } else {
+                    temp = Integer.toString(incrementor) + unitLiquid;
+                }
+                countRes.setText(String.valueOf(temp));
+                Log.i("repeatBtn", "repeat click");
+            }
+                handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+
+        }//end run
+    };// end Runnable
+
+
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -284,8 +421,8 @@ public class ManureCalc extends Activity {
     }
 
 
-
-    public JSONObject getJSONfile(String url){
+//get the jason file
+    public JSONObject getJSONfile (String url){
         StringBuffer sb = new StringBuffer();
         BufferedReader br = null;
 
@@ -319,13 +456,19 @@ public class ManureCalc extends Activity {
         return jObj;
     }
 
-
+//parse the jason object into text and set them into the text view
     public void parseJASON(){
 
         String aJasonrsltN= "";
         String aJasonrsltP= "";
         String aJasonrsltK= "";
         String aJasonrsltS= "";
+
+        int rsltN;
+        int rsltP;
+        int rsltK;
+        int rsltS;
+
 
 
         try {
@@ -343,10 +486,17 @@ public class ManureCalc extends Activity {
             aJasonrsltP = aJasonAnimal.getString("P");
             aJasonrsltS = aJasonAnimal.getString("S");
 
-            resultN.setText(aJasonrsltN);
-            resultP.setText(aJasonrsltP);
-            resultK.setText(aJasonrsltK);
-            resultS.setText(aJasonrsltS);
+
+            rsltN = Integer.parseInt(aJasonrsltN) * incrementor;
+            rsltP = Integer.parseInt(aJasonrsltP) * incrementor;
+            rsltK = Integer.parseInt(aJasonrsltK) * incrementor;
+            rsltS = Integer.parseInt(aJasonrsltS) * incrementor;
+
+
+            resultN.setText(Integer.toString(rsltN));
+            resultP.setText(Integer.toString(rsltP));
+            resultK.setText(Integer.toString(rsltK));
+            resultS.setText(Integer.toString(rsltS));
 
 
 
