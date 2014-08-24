@@ -1,0 +1,23 @@
+{
+    "Legume" : {
+        
+            "species" : "",
+            "soil" : "",
+            "density" : "",
+            "regrowth" : "",
+            "lCredit " : 000
+        
+        
+    },
+    "Manure" : {
+        "type" : "",
+        "time" : "",
+        "source" : "",
+        "count" : 1,
+        "MCreditN" : 00,
+        "MCreditP" : 00,
+        "MCreditK" : 00,
+        "MCreditS" : 00
+     }
+        
+}

@@ -1,6 +1,7 @@
 package credit.calc.ipmc.legumecredit;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -8,21 +9,16 @@ import android.view.Menu;
 import android.view.Window;
 import android.widget.TabHost;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class Main extends TabActivity {
 
 
 
-    // Global variables that can be accessed from anywhere
-    public static String applicationRate = "";	// The application rate
-    public static String range = "";			// The application rate range
-    public static String soilType = "";			// The soil type the user has selected
-    public static String prevCrop = "";			// The previous crop the user has selected
-    public static String fertPrice = "";		// The fertilizer price per ton
-    public static String nPercent = "";			// The nitrogen concentration
-    public static String cornPrice = "";		// The corn price per bushel
-    public static String nPrice = "";			// The nitrogen price calculated
-    public static String ratio = "";			// The N:Corn ratio calculated
+
 
     /*
      * Called when the activity is first created
@@ -32,7 +28,31 @@ public class Main extends TabActivity {
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        //Empty the internal output file
+        String filename_M = "EmailManure";
+        String filename_L = "EmailLegume";
+        String string = "";
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutput(filename_M, Context.MODE_PRIVATE);
+            fos.write(string.getBytes());
+            fos.close();
+            fos = openFileOutput(filename_L, Context.MODE_PRIVATE);
+            fos.write(string.getBytes());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
 
         setContentView(R.layout.activity_main); 			// Sets the layout to draw from main.xml in the res/layout directory
@@ -48,38 +68,31 @@ public class Main extends TabActivity {
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("Legume"); 										// Sets the "tag" used to keep track of this tab
-        spec.setIndicator("Legume"); 	// Sets the title and icon
+        spec.setIndicator("Legume", res.getDrawable(R.drawable.ic_action_email)); 	// Sets the title and icon
         spec.setContent(intent); 														// Sets the action to take when selected
         tabHost.addTab(spec); 															// Adds the tab to the
 
         // Do the same for the other tabs
         intent = new Intent().setClass(this, ManureCalc.class);
         spec = tabHost.newTabSpec("Manure");
-        spec.setIndicator("Manure");
+        spec.setIndicator("Manure", res.getDrawable(R.drawable.ic_action_email));
         spec.setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, Credits.class);
         spec = tabHost.newTabSpec("info");
-        spec.setIndicator("Info");
+        spec.setIndicator("INFO", res.getDrawable(R.drawable.ic_action_help));
+        //spec.setIndicator("Info");
         spec.setContent(intent);
         tabHost.addTab(spec);
 
-//        intent = new Intent().setClass(this, Email.class);
-//
-//        spec = tabHost.newTabSpec("email");
-//        spec.setIndicator("Email");
-//        spec.setContent(intent);
-//        tabHost.addTab(spec);
-
-
-
-        // Commented out because it was getting cramped and I wanted to try adding this to the context menu
-        /*intent = new Intent().setClass(this, Info.class);
-        spec = tabHost.newTabSpec("info");
-        spec.setIndicator("Info", res.getDrawable(R.drawable.info_icon));
+        intent = new Intent().setClass(this, Email.class);
+        spec = tabHost.newTabSpec("Email");
+        spec.setIndicator("EMAIL", res.getDrawable(R.drawable.ic_action_email));
+        //spec.setIndicator("Email");
         spec.setContent(intent);
-        tabHost.addTab(spec);*/
+        tabHost.addTab(spec);
+
 
         tabHost.setCurrentTab(0); // Sets the tab view to be focused on the calculator activity initially
 

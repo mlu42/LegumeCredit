@@ -1,6 +1,7 @@
 package credit.calc.ipmc.legumecredit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -18,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -50,9 +53,10 @@ public class ManureCalc extends Activity {
     private TextView resultK;
     private TextView resultS;
 
-    static JSONObject jObj = null;
-    private String myjsonstring = "";
-    private static String url = "file:///android_asset/ManureCredit.json";
+    //private JSONObject jObj = null;
+    //private String myjsonstring = "";
+    private static String urlmanure = "ManureCredits.json";
+    private static String urlemail = "EmailInfo.json";
 
 
     private String manureSpecies_Tag;
@@ -102,7 +106,7 @@ public class ManureCalc extends Activity {
 
 
         //read the jason file
-        getJSONfile(url);
+        final JSONObject obj = getJSONfile(urlmanure);
 
 
         ///////////////Set the spinner adapter ///////////////////
@@ -131,7 +135,7 @@ public class ManureCalc extends Activity {
                     spinner.setAdapter(adapter);
                 }
 
-                calculate();
+                calculate(obj);
             }
 
 
@@ -147,7 +151,7 @@ public class ManureCalc extends Activity {
 
                 }
 
-                calculate();
+                calculate(obj);
             }
 
         });
@@ -159,7 +163,7 @@ public class ManureCalc extends Activity {
                     incorpTime.setState(0);
 
                 }
-                calculate();
+                calculate(obj);
 
             }
         });
@@ -170,7 +174,7 @@ public class ManureCalc extends Activity {
                 if (incorpTime.getCurrentState() != 1) {
                     incorpTime.setState(1);
                 }
-                calculate();
+                calculate(obj);
 
             }
         });
@@ -181,7 +185,7 @@ public class ManureCalc extends Activity {
                 if (incorpTime.getCurrentState() != 2) {
                     incorpTime.setState(2);
                 }
-                calculate();
+                calculate(obj);
 
             }
         });
@@ -204,7 +208,7 @@ public class ManureCalc extends Activity {
 //                toast.show();
 
                 manureSpecies_Tag = spinner.getSelectedItem().toString();
-                calculate();
+                calculate(obj);
 
             }
 
@@ -242,7 +246,7 @@ public class ManureCalc extends Activity {
                         counter.reSetState();
                     }
                 }, 200);
-                calculate();
+                calculate(obj);
 
             }
         });
@@ -270,7 +274,7 @@ public class ManureCalc extends Activity {
                         counter.reSetState();
                     }
                 }, 200);
-                calculate();
+                calculate(obj);
 
 
             }
@@ -368,14 +372,74 @@ public class ManureCalc extends Activity {
     }
 
 
-    //call when need to calculate the result
-    public void calculate() {
+
+    /*
+    * When the activity is set aside, store the data in an internal file
+    */
+
+    @Override
+    protected void onPause() {
+        //final JSONObject jobjEmail = getJSONfile(urlemail);
+
+        try {
+            // Creating JSONObject from String
+            //JSONObject aJsonManure = jobjEmail.getJSONObject("Manure");
+
+            JSONObject aJson = new JSONObject();
+            aJson.put("type", manureType_Tag);
+            aJson.put("time", incorptime_Tag);
+            aJson.put("source",manureSpecies_Tag );
+            aJson.put("count", incrementor);
+            aJson.put("MCreditN", resultN.getText());
+            aJson.put("MCreditP", resultP.getText());
+            aJson.put("MCreditK",resultK.getText());
+            aJson.put("MCreditS", resultS.getText());
+
+            //JSONObject jManure = new JSONObject();
+            //jManure.put("Manure", aJson);
+
+
+            String FILENAME = "EmailManure";
+            String string = aJson.toString();
+
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(string.getBytes());
+            fos.close();
+
+            Log.v("checkM",aJson.toString());
+
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Calls the parent onPause() method
+        super.onPause();
+
+
+    }
+
+
+
+
+
+
+    /*
+    * call when need to calculate the result.
+    */
+    public void calculate(JSONObject obj) {
 
         if (manureType.getCurrentState() > -1 && incorpTime.getCurrentState() > -1) {
-            if (manureType.getCurrentState() == 0) {
-                manureType_Tag = "Solid";
-            } else {
-                manureType_Tag = "Liquid";
+            switch (manureType.getCurrentState()) {
+                case 0: manureType_Tag = "Solid";
+                    break;
+                case 1: manureType_Tag = "Liquid";
+                    break;
             }
 
             switch (incorpTime.getCurrentState()) {
@@ -390,7 +454,7 @@ public class ManureCalc extends Activity {
                     break;
 
             }
-            parseJASON();
+            parseJASON(obj);
 
         }
 
@@ -398,13 +462,20 @@ public class ManureCalc extends Activity {
     }
 
 
-    //get the jason file
-    public JSONObject getJSONfile(String url) {
+
+    /*
+    * get the jason file
+    * */
+    private JSONObject getJSONfile(String url) {
+
+        JSONObject jObj = null;
+        String myjsonstring = "";
+
         StringBuffer sb = new StringBuffer();
         BufferedReader br = null;
 
         try {
-            br = new BufferedReader(new InputStreamReader(getAssets().open("ManureCredits.json")));
+            br = new BufferedReader(new InputStreamReader(getAssets().open(url)));
             String temp;
             while ((temp = br.readLine()) != null) {
                 sb.append(temp);
@@ -433,8 +504,10 @@ public class ManureCalc extends Activity {
         return jObj;
     }
 
-    //parse the jason object into text and set them into the text view
-    public void parseJASON() {
+    /*
+    * parse the jason object into text and set them into the text view
+    * */
+    private void parseJASON(JSONObject jObj) {
 
         String aJasonrsltN = "";
         String aJasonrsltP = "";
@@ -484,56 +557,6 @@ public class ManureCalc extends Activity {
     }
 
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//        switch (id) {
-//            case R.id.action_settings1:
-//                emailReport();
-//                return true;
-//            case R.id.action_settings2:
-//                helpinfo("file:///android_asset/legume_help.html");
-//
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-////        return super.onOptionsItemSelected(item);
-//    }
-
-
-    /*
-    Executed when the email button is clicked
-    */
-//    private void emailReport(){
-//
-//        if(result.getText().equals("000")){
-//            Toast toast = Toast.makeText(this, "Perform a calculation first", Toast.LENGTH_SHORT);
-//            toast.show();
-//            return;
-//        }
-//
-//        Intent intent = new Intent(Intent.ACTION_SEND);								// Sets the intent to be an email intent
-//        intent.setType("plain/text");												// I don't know what this does but it's necessary
-//        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });					// The email address to send to. We don't know who the user will want to send it to.
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Legume Credit Report");	    // The subject line
-//
-//        // Build the body text string
-//        String bodyText = "";
-//        bodyText += "Forage Species: " + species.getText() + "\nSoil Type: " + soilType.getText() + "\n";
-//        bodyText += "Amount of growth: " + regrowth.getText() + "\nStand Density: " + standDensity.getText() + "\nNitrogen Credit: "+ result.getText() +" (lb N/acre)²"+"\n\n";
-//
-//        bodyText += "This email generated by Legume Credit Calculators, an Android app by the University of Wisconsin-Madison's NPM program\n";
-//        bodyText += "http://ipcm.wisc.edu/apps/";
-//
-//        intent.putExtra(Intent.EXTRA_TEXT, bodyText);			// The body text
-//        startActivity(Intent.createChooser(intent, ""));		// Starts the email activity, passing the given data with it
-//
-//    }
 
 }
 

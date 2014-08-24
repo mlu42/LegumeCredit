@@ -1,11 +1,20 @@
 package credit.calc.ipmc.legumecredit;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by mo on 8/5/14.
@@ -29,6 +38,12 @@ public class LegumeCalc extends ActionBarActivity{
     private TwoStateToggle soilType;
     private ThreeStateToggle standDensity;
     private TwoStateToggle regrowth;
+
+
+    private String legumeSpecies_Tag;
+    private String legumeSoil_Tag;
+    private String legumeDensity_Tag;
+    private String legumeRegrowth_Tag;
 
 
 
@@ -189,6 +204,85 @@ public class LegumeCalc extends ActionBarActivity{
 
 
     }
+
+
+
+
+    protected void onPause() {
+        //final JSONObject jobjEmail = getJSONfile(urlemail);
+
+        try {
+            // Creating JSONObject from String
+
+
+            switch (species.getCurrentState()){
+                case 0: legumeSpecies_Tag = "Alfalfa";
+                    break;
+                case 1: legumeSpecies_Tag = "Other";
+                    break;
+
+            }
+            switch (soilType.getCurrentState()){
+                case 0: legumeSoil_Tag = "Medium/Fine";
+                    break;
+                case 1: legumeSoil_Tag = "Sand";
+                    break;
+            }
+            switch (standDensity.getCurrentState()){
+                case 0: legumeDensity_Tag = "Good";
+                    break;
+                case 1: legumeDensity_Tag = "Fair";
+                    break;
+                case 2: legumeDensity_Tag = "Poor";
+                    break;
+            }
+            switch (regrowth.getCurrentState()){
+                case 0: legumeRegrowth_Tag = "<8";
+                    break;
+                case 1: legumeRegrowth_Tag = ">8";
+                    break;
+            }
+
+
+            JSONObject aJson = new JSONObject();
+
+            aJson.put("species", legumeSpecies_Tag);
+            aJson.put("soil", legumeSoil_Tag);
+            aJson.put("density",legumeDensity_Tag );
+            aJson.put("regrowth", legumeRegrowth_Tag);
+            aJson.put("lCredit", result.getText());
+
+//            JSONObject jLegume = new JSONObject();
+//            jLegume.put("Legume", aJson);
+
+
+
+            String FILENAME = "EmailLegume";
+            String stringTemp = aJson.toString();
+
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(stringTemp.getBytes());
+            fos.close();
+
+            Log.v("checkL", aJson.toString());
+
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        super.onPause();
+
+
+    }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -196,91 +290,6 @@ public class LegumeCalc extends ActionBarActivity{
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//        switch (id) {
-//            case R.id.action_settings1:
-//                emailReport();
-//                return true;
-//            case R.id.action_settings2:
-//                helpinfo("file:///android_asset/legume_help.html");
-//
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-////        return super.onOptionsItemSelected(item);
-//    }
-//
-//
-//    /*
-//    Executed when the email button is clicked
-//    */
-//    private void emailReport(){
-//
-//        if(result.getText().equals("000")){
-//            Toast toast = Toast.makeText(this, "Perform a calculation first", Toast.LENGTH_SHORT);
-//            toast.show();
-//            return;
-//        }
-//
-//        Intent intent = new Intent(Intent.ACTION_SEND);								// Sets the intent to be an email intent
-//        intent.setType("plain/text");												// I don't know what this does but it's necessary
-//        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });					// The email address to send to. We don't know who the user will want to send it to.
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Legume Credit Report");	    // The subject line
-//
-//        // Build the body text string
-//        String bodyText = "";
-//        bodyText += "Forage Species: " + species.getText() + "\nSoil Type: " + soilType.getText() + "\n";
-//        bodyText += "Amount of growth: " + regrowth.getText() + "\nStand Density: " + standDensity.getText() + "\nNitrogen Credit: "+ result.getText() +" (lb N/acre)²"+"\n\n";
-//
-//        bodyText += "This email generated by Legume Credit Calculators, an Android app by the University of Wisconsin-Madison's NPM program\n";
-//        bodyText += "http://ipcm.wisc.edu/apps/";
-//
-//        intent.putExtra(Intent.EXTRA_TEXT, bodyText);			// The body text
-//        startActivity(Intent.createChooser(intent, ""));		// Starts the email activity, passing the given data with it
-//
-//    }
-//    private void helpinfo(String curURL) {
-//
-//        AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
-//        alert.setTitle("Help Info");
-//
-//        WebView wv = new WebView(this);
-//        wv.getSettings().setJavaScriptEnabled(true);
-//        wv.loadUrl(curURL);
-//        wv.setWebViewClient(new WebViewClient() {
-//
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                //view.getSettings().setJavaScriptEnabled(true);
-//                view.loadUrl(url);
-//
-//                return true;
-//            }
-//        });
-//
-//        alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int id) {
-//            }
-//        });
-//        Dialog d = alert.setView(wv).create();
-//        d.show();
-//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//        lp.copyFrom(d.getWindow().getAttributes());
-//
-//        //lp.width = WindowManager.LayoutParams.FILL_PARENT;
-//        //lp.height = WindowManager.LayoutParams.FILL_PARENT;
-//        d.getWindow().setAttributes(lp);
-//
-//
-//
-//    }
+
 
 }
