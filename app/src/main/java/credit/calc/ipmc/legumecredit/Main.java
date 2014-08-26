@@ -63,19 +63,20 @@ public class Main extends TabActivity {
         TabHost.TabSpec spec;  			// Resusable TabSpec for each tab
         Intent intent;  				// Reusable Intent for each tab
 
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, LegumeCalc.class);							// Sets the intent to launch the Activity defined by Calculator.java
 
-        // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("Legume"); 										// Sets the "tag" used to keep track of this tab
-        spec.setIndicator("Legume", res.getDrawable(R.drawable.ic_action_email)); 	// Sets the title and icon
-        spec.setContent(intent); 														// Sets the action to take when selected
-        tabHost.addTab(spec); 															// Adds the tab to the
 
-        // Do the same for the other tabs
+        // // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, ManureCalc.class);
-        spec = tabHost.newTabSpec("Manure");
-        spec.setIndicator("Manure", res.getDrawable(R.drawable.ic_action_email));
+        // Initialize a TabSpec for each tab and add it to the TabHost
+        spec = tabHost.newTabSpec("Manure");            // Sets the "tag" used to keep track of this tab
+        spec.setIndicator("Manure", res.getDrawable(R.drawable.ic_action_email));  // Sets the title and icon
+        spec.setContent(intent);            // Sets the action to take when selected
+        tabHost.addTab(spec);
+
+
+        intent = new Intent().setClass(this, LegumeCalc.class);
+        spec = tabHost.newTabSpec("Legume");
+        spec.setIndicator("Legume", res.getDrawable(R.drawable.ic_action_email));
         spec.setContent(intent);
         tabHost.addTab(spec);
 
@@ -89,7 +90,6 @@ public class Main extends TabActivity {
         intent = new Intent().setClass(this, Email.class);
         spec = tabHost.newTabSpec("Email");
         spec.setIndicator("EMAIL", res.getDrawable(R.drawable.ic_action_email));
-        //spec.setIndicator("Email");
         spec.setContent(intent);
         tabHost.addTab(spec);
 
@@ -99,6 +99,9 @@ public class Main extends TabActivity {
 
 
     }
+
+
+
 
 
     @Override

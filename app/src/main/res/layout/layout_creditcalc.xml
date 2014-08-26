@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/forage_species_header"
-            android:textSize="19sp"
+            android:textSize="22sp"
             android:padding="5dp"
             android:textColor="#000"/>
         <!--  crop picker -->
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/soil_type_header"
-            android:textSize="19sp"
+            android:textSize="22sp"
             android:padding="5dp"
             android:textColor="#000"/>
         <!-- The soil type picker -->
@@ -107,7 +107,7 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/stand_density_header"
             android:padding="5dp"
-            android:textSize="19sp"
+            android:textSize="22sp"
             android:textColor="#000"/>
         <!-- The stand density picker -->
         <LinearLayout
@@ -168,7 +168,7 @@
             android:padding="5dp"
             android:layout_gravity="center_horizontal"
             android:text="@string/regrowth_type_header"
-            android:textSize="19sp"
+            android:textSize="22sp"
             android:textColor="#000"/>
         <!-- The soil type picker -->
         <LinearLayout
@@ -227,8 +227,8 @@
                 android:gravity="center_horizontal"
                 android:padding="5dp"
                 android:text="@string/output_header"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
+                android:textColor="@color/LegumeRslt"
+                android:textSize="22sp"/>
 
             <!-- The result -->
             <TextView
@@ -237,7 +237,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/result_default"
-                android:textColor="@color/black"
+                android:textColor="@color/LegumeRslt"
+                android:padding="10dp"
                 android:paddingBottom="10dp"
                 android:layout_weight="1"
                 android:textSize="50sp"/>

@@ -14,10 +14,12 @@
     <color name="background_green">#7fbf7f</color>
     <color name="text_green">#198c19</color>
 
-    <color name="N">#2A3F2A</color>
-    <color name="S">#3F2899</color>
-    <color name="K">#D86E1C</color>
-    <color name="P">#BF7F9F</color>
+    <color name="P">#0095D9</color>
+    <color name="S">#50B748</color>
+    <color name="K">#4E93FF</color>
+    <color name="N">#75470F</color>
+
+    <color name="LegumeRslt">#F000</color>
 
 
 

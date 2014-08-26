@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 
 /**
  * Created by mo on 8/5/14.
+ * Perform the Manure Calculator Activity
  */
 public class ManureCalc extends Activity {
     private ScrollView mainLayout;
@@ -44,17 +45,15 @@ public class ManureCalc extends Activity {
     private TextView countRes;
     private int incrementor = 1;
     private TwoStateToggle counter;
-    private boolean mDown;
+
 
     private Spinner spinner;
 
     private TextView resultN;
     private TextView resultP;
     private TextView resultK;
-    private TextView resultS;
+    //private TextView resultS;
 
-    //private JSONObject jObj = null;
-    //private String myjsonstring = "";
     private static String urlmanure = "ManureCredits.json";
     private static String urlemail = "EmailInfo.json";
 
@@ -65,7 +64,7 @@ public class ManureCalc extends Activity {
 
     final Handler handler = new Handler();
 
-    final int upperbound = 500;
+    final int upperbound = 50;
     final int lowerbound = 1;
     final String unitSolid = " ton/acre";
     final String unitLiquid = " gal/acre";
@@ -99,7 +98,7 @@ public class ManureCalc extends Activity {
         resultN = (TextView) findViewById(R.id.manure_output0);
         resultP = (TextView) findViewById(R.id.manure_output1);
         resultK = (TextView) findViewById(R.id.manure_output2);
-        resultS = (TextView) findViewById(R.id.manure_output3);
+//        resultS = (TextView) findViewById(R.id.manure_output3);
 
         manureType = new TwoStateToggle(manure_type1, manure_type2);
         incorpTime = new ThreeStateToggle(incorpTime1, incorpTime2, incorpTime3);
@@ -133,6 +132,7 @@ public class ManureCalc extends Activity {
                 if (manureType.getCurrentState() != 0) {
                     manureType.setState(0);
                     spinner.setAdapter(adapter);
+                    countRes.setText(changeRateUnit());
                 }
 
                 calculate(obj);
@@ -148,6 +148,7 @@ public class ManureCalc extends Activity {
                     manureType.setState(1);
                     spinner.clearAnimation();
                     spinner.setAdapter(adapter2);
+                    countRes.setText(changeRateUnit());
 
                 }
 
@@ -228,14 +229,8 @@ public class ManureCalc extends Activity {
                 counter.setState(0);
                 if (incrementor > lowerbound) {
                     incrementor--;
-                    String temp;
-                    if (manureType.getCurrentState() == 0) {
-                        temp = Integer.toString(incrementor) + unitSolid;
-                    } else {
-                        temp = Integer.toString(incrementor) + unitLiquid;
-                    }
 
-                    countRes.setText(temp);
+                    countRes.setText(changeRateUnit());
 
                 }
 
@@ -258,13 +253,8 @@ public class ManureCalc extends Activity {
                 counter.setState(1);
                 if (incrementor < upperbound) {
                     incrementor++;
-                    String temp;
-                    if (manureType.getCurrentState() == 0) {
-                        temp = Integer.toString(incrementor) + unitSolid;
-                    } else {
-                        temp = Integer.toString(incrementor) + unitLiquid;
-                    }
-                    countRes.setText(temp);
+
+                    countRes.setText(changeRateUnit());
                 }
 
 
@@ -325,18 +315,16 @@ public class ManureCalc extends Activity {
 
     }
 
-    //accelerate the increment of decrement
+    /*
+    * accelerate the increment of decrement
+    * */
     private Runnable mUpdateTaskup = new Runnable() {
         public void run() {
             if (incrementor < upperbound) {
                 incrementor++;
                 String temp;
-                if (manureType.getCurrentState() == 0) {
-                    temp = Integer.toString(incrementor) + unitSolid;
-                } else {
-                    temp = Integer.toString(incrementor) + unitLiquid;
-                }
-                countRes.setText(String.valueOf(temp));
+
+                countRes.setText(String.valueOf(changeRateUnit()));
                 Log.i("repeatBtn", "repeat click");
             }
             handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
@@ -344,18 +332,16 @@ public class ManureCalc extends Activity {
         }//end run
     };// end runnable
 
-    //accelerate the increment of decrement
+    /*
+    * accelerate the increment of decrement
+    * */
     private Runnable mUpdateTaskdown = new Runnable() {
         public void run() {
             if (incrementor > lowerbound) {
                 incrementor--;
-                String temp;
-                if (manureType.getCurrentState() == 0) {
-                    temp = Integer.toString(incrementor) + unitSolid;
-                } else {
-                    temp = Integer.toString(incrementor) + unitLiquid;
-                }
-                countRes.setText(String.valueOf(temp));
+
+
+                countRes.setText(String.valueOf(changeRateUnit()));
                 Log.i("repeatBtn", "repeat click");
             }
             handler.postAtTime(this, SystemClock.uptimeMillis() + 100);
@@ -363,6 +349,20 @@ public class ManureCalc extends Activity {
         }//end run
     };// end Runnable
 
+
+    /*
+     * help to change rate unit when appropriate
+     */
+    private String changeRateUnit() {
+        String temp;
+        if (manureType.getCurrentState() == 0) {
+            temp = Integer.toString(incrementor) + unitSolid;
+        } else {
+            temp = Integer.toString(incrementor * 1000) + unitLiquid;
+        }
+        return temp;
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -379,21 +379,19 @@ public class ManureCalc extends Activity {
 
     @Override
     protected void onPause() {
-        //final JSONObject jobjEmail = getJSONfile(urlemail);
 
         try {
             // Creating JSONObject from String
-            //JSONObject aJsonManure = jobjEmail.getJSONObject("Manure");
 
             JSONObject aJson = new JSONObject();
             aJson.put("type", manureType_Tag);
             aJson.put("time", incorptime_Tag);
-            aJson.put("source",manureSpecies_Tag );
+            aJson.put("source", manureSpecies_Tag);
             aJson.put("count", incrementor);
             aJson.put("MCreditN", resultN.getText());
             aJson.put("MCreditP", resultP.getText());
-            aJson.put("MCreditK",resultK.getText());
-            aJson.put("MCreditS", resultS.getText());
+            aJson.put("MCreditK", resultK.getText());
+            //aJson.put("MCreditS", resultS.getText());
 
             //JSONObject jManure = new JSONObject();
             //jManure.put("Manure", aJson);
@@ -406,7 +404,7 @@ public class ManureCalc extends Activity {
             fos.write(string.getBytes());
             fos.close();
 
-            Log.v("checkM",aJson.toString());
+            Log.v("checkM", aJson.toString());
 
 
         } catch (JSONException e) {
@@ -425,10 +423,6 @@ public class ManureCalc extends Activity {
     }
 
 
-
-
-
-
     /*
     * call when need to calculate the result.
     */
@@ -436,9 +430,11 @@ public class ManureCalc extends Activity {
 
         if (manureType.getCurrentState() > -1 && incorpTime.getCurrentState() > -1) {
             switch (manureType.getCurrentState()) {
-                case 0: manureType_Tag = "Solid";
+                case 0:
+                    manureType_Tag = "Solid";
                     break;
-                case 1: manureType_Tag = "Liquid";
+                case 1:
+                    manureType_Tag = "Liquid";
                     break;
             }
 
@@ -460,7 +456,6 @@ public class ManureCalc extends Activity {
 
 
     }
-
 
 
     /*
@@ -519,6 +514,8 @@ public class ManureCalc extends Activity {
         int rsltK;
         int rsltS;
 
+        int tempincr = incrementor;
+
 
         try {
             // Creating JSONObject from String
@@ -536,16 +533,16 @@ public class ManureCalc extends Activity {
             aJasonrsltS = aJasonAnimal.getString("S");
 
 
-            rsltN = Integer.parseInt(aJasonrsltN) * incrementor;
-            rsltP = Integer.parseInt(aJasonrsltP) * incrementor;
-            rsltK = Integer.parseInt(aJasonrsltK) * incrementor;
-            rsltS = Integer.parseInt(aJasonrsltS) * incrementor;
+            rsltN = Integer.parseInt(aJasonrsltN) * tempincr;
+            rsltP = Integer.parseInt(aJasonrsltP) * tempincr;
+            rsltK = Integer.parseInt(aJasonrsltK) * tempincr;
+            rsltS = Integer.parseInt(aJasonrsltS) * tempincr;
 
 
             resultN.setText(Integer.toString(rsltN));
             resultP.setText(Integer.toString(rsltP));
             resultK.setText(Integer.toString(rsltK));
-            resultS.setText(Integer.toString(rsltS));
+            //resultS.setText(Integer.toString(rsltS));
 
 
         } catch (JSONException e) {
@@ -555,7 +552,6 @@ public class ManureCalc extends Activity {
 
 
     }
-
 
 
 }

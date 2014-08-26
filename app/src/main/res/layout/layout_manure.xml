@@ -123,13 +123,20 @@
 
 
 
-
-
+        <TextView
+            android:id="@+id/manure_rate_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/manure_rate_header"
+            android:textSize="22sp"
+            android:padding="2dp"
+            android:textColor="#000"/>
         <LinearLayout
             android:id="@+id/manure_input_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
+            android:paddingTop="3dp"
             android:paddingBottom="15dp"
             android:weightSum="5"
             android:layout_gravity="center_horizontal">
@@ -294,35 +301,35 @@
                         android:textSize="50sp"/>
                     </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/manure_output_group3"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:background="@drawable/output_background"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/S"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/manure_result_header3"
-                        android:textColor="@color/S"
-                        android:layout_weight="1"
-                        android:padding="2dp"
-                        android:textSize="15sp"/>
-                    <TextView
-                        android:id="@+id/manure_output3"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/manure_result_default3"
-                        android:textColor="@color/S"
-                        android:paddingBottom="10dp"
-                        android:layout_weight="1"
-                        android:textSize="50sp"/>
-                </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/manure_output_group3"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@drawable/output_background"-->
+                    <!--android:orientation="vertical">-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/S"-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:text="@string/manure_result_header3"-->
+                        <!--android:textColor="@color/S"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:padding="2dp"-->
+                        <!--android:textSize="15sp"/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/manure_output3"-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:text="@string/manure_result_default3"-->
+                        <!--android:textColor="@color/S"-->
+                        <!--android:paddingBottom="10dp"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:textSize="50sp"/>-->
+                <!--</LinearLayout>-->
 
 
             </LinearLayout>
