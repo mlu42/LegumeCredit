@@ -11,10 +11,10 @@
 
     <color name="dark_green">#006400</color>
 
-    <color name="background_green">#7fbf7f</color>
-    <color name="text_green">#198c19</color>
+    <color name="background_green">#C8FFCA</color>
+    <color name="text_green">#007F00</color>
 
-    <color name="P">#0095D9</color>
+    <color name="P">#0072A6</color>
     <color name="S">#50B748</color>
     <color name="K">#4E93FF</color>
     <color name="N">#75470F</color>

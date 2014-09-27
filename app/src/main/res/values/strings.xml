@@ -37,8 +37,8 @@
 
 
     <string name="manure_type">Manure Type</string>
-    <string name="manure_type1">Solid</string>
-    <string name="manure_type2">Liquid</string>
+    <string name="manure_type1">Solid Manure</string>
+    <string name="manure_type2">Liquid Manure</string>
 
     <string name="incorp_time_header">Time to Incorporation</string>
     <string name="incorp_time1"><![CDATA[<1 hour]]></string>
@@ -95,6 +95,16 @@
     <string name="manure_result_header2">K<sub>2</sub>O</string>
     <string name="manure_result_header3">S</string>
     <string name="manure_rate_header">Application Rate</string>
+
+    <string name="analysis1">Yes</string>
+    <string name="analysis2">No</string>
+    <string name="analysis_title">Has the manure been analyzed?</string>
+
+    <string name="input_hint">lb/ton</string>
+    <string name="N_input_title">N Credits</string>
+    <string name="P_input_title">P<sub>2</sub>O<sub>5</sub> Credits</string>
+    <string name="K_input_title">K<sub>2</sub>O Credits</string>
+    <string name="S_input_title">S Credits</string>
 
 
 </resources>

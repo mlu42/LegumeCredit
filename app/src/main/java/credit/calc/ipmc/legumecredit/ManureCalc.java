@@ -5,12 +5,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,11 +38,27 @@ public class ManureCalc extends Activity {
 
     private TextView manure_type1;
     private TextView manure_type2;
+    private TextView incorpTime_title;
+    private TextView manure_source_title;
     private TextView incorpTime1;
     private TextView incorpTime2;
     private TextView incorpTime3;
+    private TextView analysis1;
+    private TextView analysis2;
     private TwoStateToggle manureType;
     private ThreeStateToggle incorpTime;
+    private TwoStateToggle analysisOption;
+
+    private TextView inputN_title;
+    private EditText inputN;
+    private TextView inputP205_title;
+    private EditText inputP205;
+    private TextView inputK2O_title;
+    private EditText inputK2O;
+    private TextView inputS_title;
+    private EditText inputS;
+
+
 
     private TextView decrease;
     private TextView increase;
@@ -52,7 +72,7 @@ public class ManureCalc extends Activity {
     private TextView resultN;
     private TextView resultP;
     private TextView resultK;
-    //private TextView resultS;
+    private TextView resultS;
 
     private static String urlmanure = "ManureCredits.json";
     private static String urlemail = "EmailInfo.json";
@@ -83,12 +103,29 @@ public class ManureCalc extends Activity {
         // Assign all of the instance variables
         mainLayout = (ScrollView) findViewById(R.id.main_parent);
 
+        manure_source_title =  (TextView) findViewById(R.id.manure_item_header);
+        incorpTime_title = (TextView) findViewById(R.id.incorp_time_title);
 
         manure_type1 = (TextView) findViewById(R.id.manure_type1);
         manure_type2 = (TextView) findViewById(R.id.manure_type2);
         incorpTime1 = (TextView) findViewById(R.id.incorp_time1);
         incorpTime2 = (TextView) findViewById(R.id.incorp_time2);
         incorpTime3 = (TextView) findViewById(R.id.incorp_time3);
+
+        analysis1 = (TextView) findViewById(R.id.analysis1);
+        analysis2 = (TextView) findViewById(R.id.analysis2);
+
+        inputN_title = (TextView) findViewById(R.id.N_input_title);
+        inputN = (EditText) findViewById(R.id.N_input_edit);
+        inputP205_title = (TextView) findViewById(R.id.P_input_title);
+        inputP205 = (EditText) findViewById(R.id.P_input_edit);
+        inputK2O_title = (TextView) findViewById(R.id.K_input_title);
+        inputK2O = (EditText) findViewById(R.id.K_input_edit);
+        inputS_title = (TextView) findViewById(R.id.S_input_title);
+        inputS = (EditText) findViewById(R.id.S_input_edit);
+
+
+
 
         decrease = (TextView) findViewById(R.id.minus);
         increase = (TextView) findViewById(R.id.plus);
@@ -98,10 +135,11 @@ public class ManureCalc extends Activity {
         resultN = (TextView) findViewById(R.id.manure_output0);
         resultP = (TextView) findViewById(R.id.manure_output1);
         resultK = (TextView) findViewById(R.id.manure_output2);
-//        resultS = (TextView) findViewById(R.id.manure_output3);
+        resultS = (TextView) findViewById(R.id.manure_output3);
 
         manureType = new TwoStateToggle(manure_type1, manure_type2);
         incorpTime = new ThreeStateToggle(incorpTime1, incorpTime2, incorpTime3);
+        analysisOption = new TwoStateToggle(analysis1, analysis2);
 
 
         //read the jason file
@@ -126,18 +164,26 @@ public class ManureCalc extends Activity {
         spinner.setAdapter(adapter);
 
 
+        analyzedView(View.GONE);
+        nonanalyzedView(View.VISIBLE);
+
+
+
+
+
         manure_type1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (manureType.getCurrentState() != 0) {
                     manureType.setState(0);
+                    spinner.clearAnimation();
                     spinner.setAdapter(adapter);
                     countRes.setText(changeRateUnit());
+
                 }
 
                 calculate(obj);
             }
-
 
         });
 
@@ -156,6 +202,77 @@ public class ManureCalc extends Activity {
             }
 
         });
+
+
+
+        //choose analysis type
+        analysis1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (analysisOption.getCurrentState() != 0) {
+                    analysisOption.setState(0);
+                    analyzedView(View.GONE);
+                    nonanalyzedView(View.VISIBLE);
+                    cleanResultFields();
+
+
+                }
+
+                //calculate(obj);
+            }
+
+
+        });
+
+        analysis2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (analysisOption.getCurrentState() != 1) {
+                    analysisOption.setState(1);
+
+                    analyzedView(View.VISIBLE);
+                    nonanalyzedView(View.GONE);
+                    cleanResultFields();
+
+                }
+
+                //calculate(obj);
+            }
+
+
+        });
+
+
+
+        inputN.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                calculateNonAnalyzedResult();
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){}
+        });
+        inputK2O.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                calculateNonAnalyzedResult();
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){}
+        });
+        inputP205.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                calculateNonAnalyzedResult();
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){}
+        });
+        inputS.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                calculateNonAnalyzedResult();
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){}
+        });
+
 
         incorpTime1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,7 +358,11 @@ public class ManureCalc extends Activity {
                         counter.reSetState();
                     }
                 }, 200);
-                calculate(obj);
+                if(analysisOption.getCurrentState()==1) {
+                    calculate(obj);
+                }else{
+                    calculateNonAnalyzedResult();
+                }
 
             }
         });
@@ -264,7 +385,12 @@ public class ManureCalc extends Activity {
                         counter.reSetState();
                     }
                 }, 200);
-                calculate(obj);
+
+                if(analysisOption.getCurrentState()==1) {
+                    calculate(obj);
+                }else{
+                    calculateNonAnalyzedResult();
+                }
 
 
             }
@@ -314,6 +440,42 @@ public class ManureCalc extends Activity {
 
 
     }
+
+
+    private void cleanResultFields(){
+        resultN.setText("00");
+        resultP.setText("00");
+        resultK.setText("00");
+        resultS.setText("00");
+    }
+
+    private void analyzedView(int v){
+        incorpTime_title.setVisibility(v);
+        incorpTime1.setVisibility(v);
+        incorpTime2.setVisibility(v);
+        incorpTime3.setVisibility(v);
+
+        manure_source_title.setVisibility(v);
+        spinner.setVisibility(v);
+
+
+
+
+    }
+
+    private void nonanalyzedView(int v){
+
+        inputN_title.setVisibility(v);
+        inputN.setVisibility(v);
+        inputP205_title.setVisibility(v);
+        inputP205.setVisibility(v);
+        inputK2O_title.setVisibility(v);
+        inputK2O.setVisibility(v);
+        inputS_title.setVisibility(v);
+        inputS.setVisibility(v);
+    }
+
+
 
     /*
     * accelerate the increment of decrement
@@ -538,11 +700,15 @@ public class ManureCalc extends Activity {
             rsltK = Integer.parseInt(aJasonrsltK) * tempincr;
             rsltS = Integer.parseInt(aJasonrsltS) * tempincr;
 
+            adjustTextSize(rsltN, resultN);
+            adjustTextSize(rsltK, resultK);
+            adjustTextSize(rsltP, resultP);
+            adjustTextSize(rsltS, resultS);
 
             resultN.setText(Integer.toString(rsltN));
             resultP.setText(Integer.toString(rsltP));
             resultK.setText(Integer.toString(rsltK));
-            //resultS.setText(Integer.toString(rsltS));
+            resultS.setText(Integer.toString(rsltS));
 
 
         } catch (JSONException e) {
@@ -552,6 +718,55 @@ public class ManureCalc extends Activity {
 
 
     }
+
+
+    private boolean calculateNonAnalyzedResult(){
+
+        if(!isEmpty(inputN) && !isEmpty(inputP205) && !isEmpty(inputK2O) && !isEmpty(inputS)){
+            //Log.v("EditText", " in the loop");
+            int rsltN = Integer.parseInt(inputN.getText().toString()) * incrementor;
+            int rsltP = Integer.parseInt(inputP205.getText().toString()) * incrementor;
+            int rsltK = Integer.parseInt(inputK2O.getText().toString()) * incrementor;
+            int rsltS = Integer.parseInt(inputS.getText().toString()) * incrementor;
+
+
+            adjustTextSize(rsltN, resultN);
+            adjustTextSize(rsltK, resultK);
+            adjustTextSize(rsltP, resultP);
+            adjustTextSize(rsltS, resultS);
+
+
+
+            resultN.setText(Integer.toString(rsltN));
+            resultP.setText(Integer.toString(rsltP));
+            resultK.setText(Integer.toString(rsltK));
+            resultS.setText(Integer.toString(rsltS));
+
+            return true;
+        }
+
+        //Log.v("EditText", "Did not end in the loop");
+        return false;
+    }
+
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    private void adjustTextSize(int n, TextView v){
+        if(n<100){
+            v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);
+        }else {
+            v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 35);
+        }
+
+    }
+
+
+
 
 
 }

@@ -67,8 +67,8 @@ public class ThreeStateToggle {
 
 
 
-        unselectedColor=Color.parseColor("#198c19");
-        selectedColor = Color.parseColor("#7fbf7f");
+        unselectedColor=Color.parseColor("#007F00");
+        selectedColor = Color.parseColor("#C8FFCA");
 
 
         set = -1;

@@ -1,56 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:background="@color/background_green">
+    android:background="@color/background_green"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/subject_line_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:padding="45dp"
+        android:orientation="vertical"
 
 
-        android:orientation="vertical">
-
-    <Button
-        android:id="@+id/legume_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="60dp"
-        android:layout_margin="20dp"
+        android:padding="45dp">
 
 
-        android:layout_weight="1"
-        android:background="@drawable/email_button"
-        android:drawableLeft="@drawable/ic_action_send_now"
-        android:textColor="@color/text_green"
+        <Button
+            android:id="@+id/manure_button"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/email_button"
+
+            android:drawableLeft="@drawable/ic_action_send_now"
+            android:gravity="center_horizontal"
+            android:padding="60dp"
+            android:text="Manure Report"
 
 
-        android:text="Legume Report" />
+            android:textColor="@color/text_green" />
 
-    <Button
-        android:id="@+id/manure_button"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:padding="60dp"
-        android:layout_margin="20dp"
-
-        android:layout_weight="1"
-        android:background="@drawable/email_button"
-        android:drawableLeft="@drawable/ic_action_send_now"
-        android:textColor="@color/text_green"
+        <Button
+            android:id="@+id/legume_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/email_button"
 
 
+            android:drawableLeft="@drawable/ic_action_send_now"
+            android:gravity="center"
+            android:padding="60dp"
+            android:text="Legume Report"
 
-        android:text="Manure Report" />
-       </LinearLayout>
+
+            android:textColor="@color/text_green" />
+
+
+    </LinearLayout>
 
 </LinearLayout>
