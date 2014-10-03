@@ -10,6 +10,7 @@
         
     },
     "Manure" : {
+        "analyzed" : y,
         "type" : "",
         "time" : "",
         "source" : "",
@@ -19,5 +20,7 @@
         "MCreditK" : 00,
         "MCreditS" : 00
      }
+
+
         
 }

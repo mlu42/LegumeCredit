@@ -182,7 +182,11 @@ public class ManureCalc extends Activity {
 
                 }
 
-                calculate(obj);
+                if(analysisOption.getCurrentState()==1) {
+                    calculate(obj);
+                }else{
+                    calculateNonAnalyzedResult();
+                }
             }
 
         });
@@ -198,7 +202,11 @@ public class ManureCalc extends Activity {
 
                 }
 
-                calculate(obj);
+                if(analysisOption.getCurrentState()==1) {
+                    calculate(obj);
+                }else{
+                    calculateNonAnalyzedResult();
+                }
             }
 
         });
@@ -406,7 +414,7 @@ public class ManureCalc extends Activity {
                     counter.setState(0);
                     Log.i("repeatBtn", "MotionEvent.ACTION_DOWN");
                     handler.removeCallbacks(mUpdateTaskdown);
-                    handler.postAtTime(mUpdateTaskdown, SystemClock.uptimeMillis() + 100);
+                    handler.postAtTime(mUpdateTaskdown, SystemClock.uptimeMillis() + 500);
                 } else if (action == MotionEvent.ACTION_UP) {
                     Log.i("repeatBtn", "MotionEvent.ACTION_UP");
                     handler.removeCallbacks(mUpdateTaskdown);
@@ -428,7 +436,7 @@ public class ManureCalc extends Activity {
                     counter.setState(1);
                     Log.i("repeatBtn", "MotionEvent.ACTION_DOWN");
                     handler.removeCallbacks(mUpdateTaskup);
-                    handler.postAtTime(mUpdateTaskup, SystemClock.uptimeMillis() + 100);
+                    handler.postAtTime(mUpdateTaskup, SystemClock.uptimeMillis() + 500);
                 } else if (action == MotionEvent.ACTION_UP) {
                     Log.i("repeatBtn", "MotionEvent.ACTION_UP");
                     handler.removeCallbacks(mUpdateTaskup);
@@ -546,19 +554,29 @@ public class ManureCalc extends Activity {
             // Creating JSONObject from String
 
             JSONObject aJson = new JSONObject();
-            aJson.put("type", manureType_Tag);
-            aJson.put("time", incorptime_Tag);
-            aJson.put("source", manureSpecies_Tag);
-            aJson.put("count", incrementor);
-            aJson.put("MCreditN", resultN.getText());
-            aJson.put("MCreditP", resultP.getText());
-            aJson.put("MCreditK", resultK.getText());
-            //aJson.put("MCreditS", resultS.getText());
+            if(analysisOption.getCurrentState() == 0 ){
+                aJson.put("analyzed", "y");
+                aJson.put("type", manureType_Tag);
+                aJson.put("count", incrementor);
+                aJson.put("MCreditN", resultN.getText());
+                aJson.put("MCreditP", resultP.getText());
+                aJson.put("MCreditK", resultK.getText());
+                aJson.put("MCreditS", resultS.getText());
+            }else {
+                aJson.put("analyzed", "n");
+                aJson.put("type", manureType_Tag);
+                aJson.put("time", incorptime_Tag);
+                aJson.put("source", manureSpecies_Tag);
+                aJson.put("count", incrementor);
+                aJson.put("MCreditN", resultN.getText());
+                aJson.put("MCreditP", resultP.getText());
+                aJson.put("MCreditK", resultK.getText());
+                aJson.put("MCreditS", resultS.getText());
 
-            //JSONObject jManure = new JSONObject();
-            //jManure.put("Manure", aJson);
+                //JSONObject jManure = new JSONObject();
+                //jManure.put("Manure", aJson);
 
-
+            }
             String FILENAME = "EmailManure";
             String string = aJson.toString();
 
@@ -700,10 +718,21 @@ public class ManureCalc extends Activity {
             rsltK = Integer.parseInt(aJasonrsltK) * tempincr;
             rsltS = Integer.parseInt(aJasonrsltS) * tempincr;
 
-            adjustTextSize(rsltN, resultN);
-            adjustTextSize(rsltK, resultK);
-            adjustTextSize(rsltP, resultP);
-            adjustTextSize(rsltS, resultS);
+            if(rsltN > 100 || rsltP>100 || rsltK>100 || rsltS >100 ) {
+                boolean bigger = false;
+                adjustTextSize(rsltN, resultN, bigger);
+                adjustTextSize(rsltK, resultK, bigger);
+                adjustTextSize(rsltP, resultP, bigger);
+                adjustTextSize(rsltS, resultS, bigger);
+            }else{
+                boolean bigger = true;
+                adjustTextSize(rsltN, resultN, bigger);
+                adjustTextSize(rsltK, resultK, bigger);
+                adjustTextSize(rsltP, resultP, bigger);
+                adjustTextSize(rsltS, resultS, bigger);
+
+
+            }
 
             resultN.setText(Integer.toString(rsltN));
             resultP.setText(Integer.toString(rsltP));
@@ -721,6 +750,16 @@ public class ManureCalc extends Activity {
 
 
     private boolean calculateNonAnalyzedResult(){
+        if (manureType.getCurrentState() > -1) {
+            switch (manureType.getCurrentState()) {
+                case 0:
+                    manureType_Tag = "Solid";
+                    break;
+                case 1:
+                    manureType_Tag = "Liquid";
+                    break;
+            }
+        }
 
         if(!isEmpty(inputN) && !isEmpty(inputP205) && !isEmpty(inputK2O) && !isEmpty(inputS)){
             //Log.v("EditText", " in the loop");
@@ -730,12 +769,21 @@ public class ManureCalc extends Activity {
             int rsltS = Integer.parseInt(inputS.getText().toString()) * incrementor;
 
 
-            adjustTextSize(rsltN, resultN);
-            adjustTextSize(rsltK, resultK);
-            adjustTextSize(rsltP, resultP);
-            adjustTextSize(rsltS, resultS);
+            if(rsltN > 100 || rsltP>100 || rsltK>100 || rsltS >100 ) {
+                boolean bigger = false;
+                adjustTextSize(rsltN, resultN, bigger);
+                adjustTextSize(rsltK, resultK, bigger);
+                adjustTextSize(rsltP, resultP, bigger);
+                adjustTextSize(rsltS, resultS, bigger);
+            }else{
+                boolean bigger = true;
+                adjustTextSize(rsltN, resultN, bigger);
+                adjustTextSize(rsltK, resultK, bigger);
+                adjustTextSize(rsltP, resultP, bigger);
+                adjustTextSize(rsltS, resultS, bigger);
 
 
+            }
 
             resultN.setText(Integer.toString(rsltN));
             resultP.setText(Integer.toString(rsltP));
@@ -756,8 +804,8 @@ public class ManureCalc extends Activity {
             return true;
         }
     }
-    private void adjustTextSize(int n, TextView v){
-        if(n<100){
+    private void adjustTextSize(int n, TextView v, boolean bigger){
+        if(bigger){
             v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);
         }else {
             v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 35);

@@ -126,7 +126,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_hint"
-                android:maxLength="3"
+                android:maxLength="2"
                 android:inputType="number" />
 
         </LinearLayout>
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_hint"
-                android:maxLength="3"
+                android:maxLength="2"
                 android:inputType="number" />
 
         </LinearLayout>
@@ -177,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_hint"
-                android:maxLength="3"
+                android:maxLength="2"
                 android:inputType="number" />
 
         </LinearLayout>
@@ -201,7 +201,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_hint"
-                android:maxLength="3"
+                android:maxLength="2"
                 android:inputType="number" />
 
         </LinearLayout>
