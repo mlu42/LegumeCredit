@@ -620,13 +620,13 @@ public class ManureCalc extends Activity {
 
             switch (incorpTime.getCurrentState()) {
                 case 0:
-                    incorptime_Tag = ">";
+                    incorptime_Tag = "<";
                     break;
                 case 1:
                     incorptime_Tag = "-";
                     break;
                 case 2:
-                    incorptime_Tag = "<";
+                    incorptime_Tag = ">";
                     break;
 
             }
